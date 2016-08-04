@@ -30,7 +30,7 @@ gogs-user:
     - shell: /bin/bash
     - system: True
 
-{# TODO: conditional based on init system?? #}
+{# TODO: conditional based on init system?? -#}
 gogs-systemd-file:
   file.managed:
     - name: /etc/systemd/system/gogs.service
