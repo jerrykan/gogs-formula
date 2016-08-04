@@ -17,8 +17,12 @@ gogs-binary-package:
 {%- endif %}
     - archive_format: tar
     - if_missing: {{ gogs.install_dir }}/gogs
-    # leading space and trailing dash are required (v2014.1.13)
+{%- if salt['grains.get']('saltversion') < (2014, 7, 1) %}
+    # leading space and trailing dash are required for salt <2014.7.1
     - tar_options: ' --strip-components=1 -'
+{%- else %}
+    - tar_options: '--strip-components=1'
+{%- endif %}
     - require:
       - file: gogs-binary-dir
 
