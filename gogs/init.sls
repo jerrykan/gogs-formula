@@ -14,6 +14,7 @@ gogs-binary-package:
     - source: {{ gogs.binary_archive }}
 {%- if gogs.binary_archive_hash %}
     - source_hash: {{ gogs.binary_archive_hash }}
+    - source_hash_update: True
 {%- endif %}
     - archive_format: tar
     - if_missing: {{ gogs.install_dir }}/gogs
