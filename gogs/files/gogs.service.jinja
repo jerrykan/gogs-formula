@@ -1,0 +1,17 @@
+{%- from "gogs/map.jinja" import gogs with context -%}
+[Unit]
+Description=Gogs (Go Git Service)
+After=syslog.target
+After=network.target
+
+[Service]
+Type=simple
+User={{ gogs.user }}
+Group={{ gogs.user }}
+WorkingDirectory={{ gogs.install_dir }}
+ExecStart={{ gogs.install_dir }}/gogs web -c {{ gogs.conf_file }}
+Restart=always
+Environment=USER={{ gogs.user }} HOME={{ gogs.home_dir }}
+
+[Install]
+WantedBy=multi-user.target

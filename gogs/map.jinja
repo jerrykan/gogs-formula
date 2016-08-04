@@ -1,0 +1,35 @@
+{%- import_yaml "gogs/defaults.yaml" as defaults -%}
+
+{%- set gogs = defaults.gogs -%}
+
+{# Don't use the default hash if the default binary source is not being used #}
+{%- if salt['pillar.get']('gogs:lookup:binary_archive', None) -%}
+    {%- do gogs.update({
+        'binary_archive_hash': '',
+    })-%}
+{%- endif -%}
+
+{# Fetch some pillar data and to set default values based on these directories #}
+{%- do gogs.update({
+    'conf_dir': salt['pillar.get']('gogs:lookup:conf_dir', gogs['conf_dir']),
+    'data_dir': salt['pillar.get']('gogs:lookup:data_dir', gogs['data_dir']),
+}) -%}
+
+{# Set some default "non-static" default values #}
+{%- do gogs.update({
+    'conf_file': '{0}/app.ini'.format(gogs['conf_dir']),
+    'sqlite_db_file': '{0}/gogs.db'.format(gogs['data_dir']),
+    'data_sessions_dir': '{0}/sessions/'.format(gogs['data_dir']),
+    'data_avatars_dir': '{0}/avatars/'.format(gogs['data_dir']),
+    'data_attachments_dir': '{0}/attachments/'.format(gogs['data_dir']),
+
+    'security_secret_key': salt['grains.get_or_set_hash'](
+        'gogs:security_secret_key',
+        length=15,
+        chars=('abcdefghijklmnopqrstuvwxyz' +
+               'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+               '12345678790')
+    ),
+}) -%}
+
+{%- do gogs.update(salt['pillar.get']('gogs:lookup', {})) -%}

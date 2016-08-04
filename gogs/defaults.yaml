@@ -1,0 +1,44 @@
+gogs:
+  user: git
+
+  binary_archive: https://github.com/gogits/gogs/releases/download/v0.9.48/linux_amd64.tar.gz
+  binary_archive_hash: md5=8bb5d291e59bbb2a37ccee9efc5dd877
+
+  install_dir: /opt/gogs
+  conf_dir: /etc/gogs
+  home_dir: /var/lib/gogs/home
+  data_dir: /var/lib/gogs/data
+  logs_dir: /var/log/gogs
+  repo_root_dir: /var/lib/gogs/repos
+
+  # config
+  app_name: 'Gogs: Go Git Service'
+  run_mode: prod
+
+  server_protocol: http
+  server_domain: localhost
+  server_http_addr: '0.0.0.0'
+  server_http_port: 3000
+  server_disable_ssh: 'false'
+  server_ssh_port: 22
+  server_offline_mode: 'false'
+
+  db_type: sqlite3
+  # default for PostgreSQL backend
+  db_ssl_mode: disable
+
+  service_register_email_confirm: 'false'
+  service_enable_notify_mail: 'false'
+  service_disable_registration: 'false'
+  service_enable_captcha: 'false'
+  service_require_signin_view: 'false'
+  
+  # TODO: correctly manage mailer confif and document in pillar.example
+  mailer_enabled: 'false'
+
+  session_provider: file
+  
+  picture_disable_gravatar: 'false'
+
+  log_mode: 'file'
+  log_level: 'Warn'

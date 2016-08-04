@@ -1,0 +1,70 @@
+{%- from "gogs/map.jinja" import gogs with context -%}
+
+APP_NAME = {{ gogs.app_name }}
+RUN_USER = {{ gogs.user }}
+RUN_MODE = {{ gogs.run_mode }}
+
+[repository]
+ROOT = {{ gogs.repo_root_dir }}
+FORCE_PRVATE = {{ gogs.repository_force_private|lower }}
+
+[server]
+PROTOCOL = {{ gogs.server_protocol }}
+DOMAIN = {{ gogs.server_domain }}
+{%- if 'server_root_url' in gogs %}
+ROOT_URL = {{ gogs.server_root_url }}
+{%- endif %}
+HTTP_ADDR = {{ gogs.server_http_addr }}
+HTTP_PORT = {{ gogs.server_http_port }}
+{%- if 'server_local_root_url' in gogs %}
+LOCAL_ROOT_URL = {{ gogs.server_local_root_url }}
+{%- endif %}
+
+DISABLE_SSH = {{ gogs.server_disable_ssh|lower }}
+SSH_PORT = {{ gogs.server_ssh_port }}
+OFFLINE_MODE = {{ gogs.server_offline_mode|lower }}
+APP_DATA_PATH = {{ gogs.data_dir }}
+
+[database]
+DB_TYPE = {{ gogs.db_type }}
+{%- if gogs.db_type != 'sqlite3' %}
+HOST = {{ gogs.db_host }}
+NAME = {{ gogs.db_name }}
+USER = {{ gogs.db_user }}
+PASSWD = {{ gogs.db_pass }}
+{%- if gogs.db_type == 'postgres' %}
+SSL_MODE = {{ gogs.db_ssl_mode }}
+{%- endif %}
+{%- else %}
+PATH = {{ gogs.sqlite_db_file }}
+{%- endif %}
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = {{ gogs.security_secret_key }}
+
+[service]
+REGISTER_EMAIL_CONFIRM = {{ gogs.service_register_email_confirm|lower }}
+DISABLE_REGISTRATION = {{ gogs.service_disable_registration|lower }}
+REQUIRE_SIGNIN_VIEW = {{ gogs.service_require_signin_view|lower }}
+ENABLE_NOTIFY_MAIL = {{ gogs.service_enable_notify_mail|lower }}
+ENABLE_CAPTCHA = {{ gogs.service_enable_captcha|lower }}
+
+[mailer]
+ENABLED = {{ gogs.mailer_enabled|lower }}
+
+[session]
+PROVIDER = {{ gogs.session_provider }}
+PROVIDER_CONFIG = {{ gogs.data_sessions_dir }}
+
+[picture]
+AVATAR_UPLOAD_PATH = {{ gogs.data_avatars_dir }}
+DISABLE_GRAVATAR = {{ gogs.picture_disable_gravatar|lower }}
+
+[attachment]
+PATH = {{ gogs.data_attachments_dir }}
+
+[log]
+ROOT_PATH = {{ gogs.logs_dir }}
+MODE = {{ gogs.log_mode }}
+LEVEL = {{ gogs.log_level }}
