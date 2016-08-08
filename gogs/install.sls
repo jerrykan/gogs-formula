@@ -14,13 +14,13 @@ gogs-binary-package:
     - source: {{ gogs.binary_archive }}
 {%- if gogs.binary_archive_hash %}
     - source_hash: {{ gogs.binary_archive_hash }}
-{%- if salt['grains.get']('saltversion') >= (2016, 3, 0) %}
+{%- if salt['grains.get']('saltversioninfo') >= [2016, 3, 0] %}
     - source_hash_update: True
 {%- endif %}
 {%- endif %}
     - archive_format: tar
     - if_missing: {{ gogs.install_dir }}/gogs
-{%- if salt['grains.get']('saltversion') < (2014, 7, 1) %}
+{%- if salt['grains.get']('saltversioninfo') < [2014, 7, 1] %}
     # leading space and trailing dash are required for salt <2014.7.1
     - tar_options: ' --strip-components=1 -'
 {%- else %}
