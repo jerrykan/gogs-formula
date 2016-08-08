@@ -14,7 +14,9 @@ gogs-binary-package:
     - source: {{ gogs.binary_archive }}
 {%- if gogs.binary_archive_hash %}
     - source_hash: {{ gogs.binary_archive_hash }}
+{%- if salt['grains.get']('saltversion') >= (2016, 3, 0) %}
     - source_hash_update: True
+{%- endif %}
 {%- endif %}
     - archive_format: tar
     - if_missing: {{ gogs.install_dir }}/gogs
