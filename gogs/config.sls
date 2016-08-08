@@ -1,7 +1,7 @@
 {%- from "gogs/map.jinja" import gogs with context -%}
 
-#include:
-#  - gogs
+include:
+  - gogs
 
 gogs-conf-dir:
   file.directory:
@@ -14,5 +14,5 @@ gogs_conf_file:
     - template: jinja
     - require:
       - file: gogs-conf-dir
-#    - watch_in:
-#      - module: gogs-restart
+    - watch_in:
+      - module: gogs-restart
