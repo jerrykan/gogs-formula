@@ -58,3 +58,5 @@ gogs-restart:
     - m_name: gogs
     - require:
       - service: gogs-service
+    - watch:
+      - archive: gogs-binary-package
