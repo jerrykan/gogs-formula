@@ -82,6 +82,9 @@ gogs:
     # 'Trace', 'Debug', 'Info', 'Warn', 'Error', or 'Critical' (default: Warn)
     log_level: Error
 
+    # enable internal log rotation of gogs.log file (default: false)
+    log_file_log_rotate: 'true'
+
     # defaults to '<conf_dir>/app.ini' if not defined
     conf_file: /etc/gogs/config.ini
     # defaults to '<data_dir>/gogs.db' if not defined

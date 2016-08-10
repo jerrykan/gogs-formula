@@ -44,3 +44,5 @@ gogs:
 
   log_mode: 'file'
   log_level: 'Warn'
+
+  log_file_log_rotate: 'false'

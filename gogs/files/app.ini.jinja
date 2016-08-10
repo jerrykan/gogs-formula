@@ -68,3 +68,6 @@ PATH = {{ gogs.data_attachments_dir }}
 ROOT_PATH = {{ gogs.logs_dir }}
 MODE = {{ gogs.log_mode }}
 LEVEL = {{ gogs.log_level }}
+
+[log.file]
+LOG_ROTATE = {{ gogs.log_file_log_rotate|lower }}
