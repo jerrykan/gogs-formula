@@ -1,26 +1,9 @@
 {%- import_yaml "gogs/defaults.yaml" as defaults -%}
 
-{# Fetch some pillar data and to set default values based on these directories #}
-{%- set conf_dir = salt['pillar.get']('gogs:lookup:conf_dir', defaults.gogs.conf_dir) -%}
-{%- set data_dir = salt['pillar.get']('gogs:lookup:data_dir', defaults.gogs.data_dir) -%}
-
 {# Set some default "non-static" default values #}
 {%- do defaults.gogs.update({
-    'conf_dir': conf_dir,
-    'data_dir': data_dir,
-
-    'conf_file': '{0}/app.ini'.format(conf_dir),
-    'sqlite_db_file': '{0}/gogs.db'.format(data_dir),
-    'data_sessions_dir': '{0}/sessions/'.format(data_dir),
-    'data_avatars_dir': '{0}/avatars/'.format(data_dir),
-    'data_attachments_dir': '{0}/attachments/'.format(data_dir),
-
-    'security_secret_key': salt['grains.get_or_set_hash'](
-        'gogs:security_secret_key',
-        length=15,
-        chars=('abcdefghijklmnopqrstuvwxyz' +
-               'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-               '12345678790')
+    'conf_file': '{0}/app.ini'.format(salt['pillar.get'](
+        'gogs:lookup:conf_dir', defaults.gogs.conf_dir)
     ),
 }) -%}
 

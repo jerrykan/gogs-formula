@@ -1,73 +1,85 @@
 {%- from "gogs/map.jinja" import gogs with context -%}
 
-APP_NAME = {{ gogs.app_name }}
-RUN_USER = {{ gogs.user }}
-RUN_MODE = {{ gogs.run_mode }}
+{%- set config = salt['pillar.get']('gogs:config', {}) -%}
+
+{%- set data_dir = config.get('server_app_data_path', gogs.data_dir) -%}
+{%- set db_type = config.get('db_type', 'sqlite3') -%}
+
+APP_NAME = {{ config.get('app_name', 'Gogs: Go Git Service') }}
+RUN_USER = {{ config.get('run_user', gogs.user) }}
+RUN_MODE = {{ config.get('run_mode', 'prod') }}
 
 [repository]
-ROOT = {{ gogs.repo_root_dir }}
-FORCE_PRVATE = {{ gogs.repository_force_private|lower }}
+ROOT = {{ config.get('repository_root', gogs.repo_root_dir) }}
+FORCE_PRVATE = {{ config.get('repository_force_private', 'false')|lower }}
 
 [server]
-PROTOCOL = {{ gogs.server_protocol }}
-DOMAIN = {{ gogs.server_domain }}
-{%- if 'server_root_url' in gogs %}
-ROOT_URL = {{ gogs.server_root_url }}
+PROTOCOL = {{ config.get('server_protocol', 'http') }}
+DOMAIN = {{ config.get('server_domain', 'localhost') }}
+{%- if 'server_root_url' in config %}
+ROOT_URL = {{ config.server_root_url }}
 {%- endif %}
-HTTP_ADDR = {{ gogs.server_http_addr }}
-HTTP_PORT = {{ gogs.server_http_port }}
+HTTP_ADDR = {{ config.get('server_http_addr', '0.0.0.0') }}
+HTTP_PORT = {{ config.get('server_http_port', '3000') }}
 {%- if 'server_local_root_url' in gogs %}
-LOCAL_ROOT_URL = {{ gogs.server_local_root_url }}
+LOCAL_ROOT_URL = {{ config.server_local_root_url }}
 {%- endif %}
 
-DISABLE_SSH = {{ gogs.server_disable_ssh|lower }}
-SSH_PORT = {{ gogs.server_ssh_port }}
-OFFLINE_MODE = {{ gogs.server_offline_mode|lower }}
-APP_DATA_PATH = {{ gogs.data_dir }}
+DISABLE_SSH = {{ config.get('server_disable_ssh', 'false')|lower }}
+SSH_PORT = {{ config.get('server_ssh_port', 22) }}
+OFFLINE_MODE = {{ config.get('server_offline_mode', 'false')|lower }}
+APP_DATA_PATH = {{ data_dir }}
 
 [database]
-DB_TYPE = {{ gogs.db_type }}
-{%- if gogs.db_type != 'sqlite3' %}
-HOST = {{ gogs.db_host }}
-NAME = {{ gogs.db_name }}
-USER = {{ gogs.db_user }}
-PASSWD = {{ gogs.db_pass }}
-{%- if gogs.db_type == 'postgres' %}
-SSL_MODE = {{ gogs.db_ssl_mode }}
+DB_TYPE = {{ db_type }}
+{%- if db_type != 'sqlite3' %}
+HOST = {{ config.db_host }}
+NAME = {{ config.db_name }}
+USER = {{ config.db_user }}
+PASSWD = {{ config.db_pass }}
+{%- if db_type == 'postgres' %}
+SSL_MODE = {{ config.get('db_ssl_mode', 'disable')  }}
 {%- endif %}
 {%- else %}
-PATH = {{ gogs.sqlite_db_file }}
+PATH = {{ config.get('sqlite_db_file', data_dir ~ '/gogs.db') }}
 {%- endif %}
 
 [security]
 INSTALL_LOCK = true
-SECRET_KEY = {{ gogs.security_secret_key }}
+SECRET_KEY = {{ config.get('security_secret_key', salt['grains.get_or_set_hash'](
+    'gogs:security_secret_key',
+    length=15,
+    chars=('abcdefghijklmnopqrstuvwxyz' +
+           'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
+           '12345678790')
+)) }}
 
 [service]
-REGISTER_EMAIL_CONFIRM = {{ gogs.service_register_email_confirm|lower }}
-DISABLE_REGISTRATION = {{ gogs.service_disable_registration|lower }}
-REQUIRE_SIGNIN_VIEW = {{ gogs.service_require_signin_view|lower }}
-ENABLE_NOTIFY_MAIL = {{ gogs.service_enable_notify_mail|lower }}
-ENABLE_CAPTCHA = {{ gogs.service_enable_captcha|lower }}
+REGISTER_EMAIL_CONFIRM = {{ config.get('service_register_email_confirm', 'false')|lower }}
+DISABLE_REGISTRATION = {{ config.get('service_disable_registration', 'false')|lower }}
+REQUIRE_SIGNIN_VIEW = {{ config.get('service_require_signin_view', 'false')|lower }}
+ENABLE_NOTIFY_MAIL = {{ config.get('service_enable_notify_mail', 'false')|lower }}
+ENABLE_CAPTCHA = {{ config.get('service_enable_captcha', 'false')|lower }}
 
 [mailer]
-ENABLED = {{ gogs.mailer_enabled|lower }}
+{#- TODO: correctly manage mailer config and document in pillar.example #}
+ENABLED = {{ config.get('mailer_enabled', 'false')|lower }}
 
 [session]
-PROVIDER = {{ gogs.session_provider }}
-PROVIDER_CONFIG = {{ gogs.data_sessions_dir }}
+PROVIDER = {{ config.get('session_provider', 'file') }}
+PROVIDER_CONFIG = {{ config.get('session_provider_config', data_dir ~ '/sessions/') }}
 
 [picture]
-AVATAR_UPLOAD_PATH = {{ gogs.data_avatars_dir }}
-DISABLE_GRAVATAR = {{ gogs.picture_disable_gravatar|lower }}
+AVATAR_UPLOAD_PATH = {{ config.get('picture_avatar_upload_path', data_dir ~ '/avatars/') }}
+DISABLE_GRAVATAR = {{ config.get('picture_disable_gravatar', 'false')|lower }}
 
 [attachment]
-PATH = {{ gogs.data_attachments_dir }}
+PATH = {{ config.get('attachment_path', data_dir ~ '/attachments/') }}
 
 [log]
-ROOT_PATH = {{ gogs.logs_dir }}
-MODE = {{ gogs.log_mode }}
-LEVEL = {{ gogs.log_level }}
+ROOT_PATH = {{ config.get('log_root_path', gogs.logs_dir) }}
+MODE = {{ config.get('log_mode', 'file') }}
+LEVEL = {{ config.get('log_level', 'Warn') }}
 
 [log.file]
-LOG_ROTATE = {{ gogs.log_file_log_rotate|lower }}
+LOG_ROTATE = {{ config.get('log_file_log_rotate', 'false')|lower }}

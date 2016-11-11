@@ -1,7 +1,5 @@
 gogs:
   lookup:
-    ### GENERAL OPTIONS ###
-
     # user used to connect via ssh and to run the gogs service
     user: git
 
@@ -23,7 +21,7 @@ gogs:
     # base directory for gogs repositories
     repo_root_dir: /var/lib/gogs/repos
 
-    ### CONFIG OPTIONS ###
+  config:
     # These options generally map to <section>_<option> in the gogs config file
 
     # name that shows on every page title
