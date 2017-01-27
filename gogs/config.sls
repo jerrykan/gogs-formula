@@ -6,6 +6,7 @@ include:
 gogs-conf-dir:
   file.directory:
     - name: {{ gogs.conf_dir }}
+    - mode: 755
 
 gogs_conf_file:
   file.managed:
