@@ -72,6 +72,7 @@ PROVIDER_CONFIG = {{ config.get('session_provider_config', data_dir ~ '/sessions
 [picture]
 AVATAR_UPLOAD_PATH = {{ config.get('picture_avatar_upload_path', data_dir ~ '/avatars/') }}
 DISABLE_GRAVATAR = {{ config.get('picture_disable_gravatar', 'false')|lower }}
+ENABLE_FEDERATED_AVATAR = {{ config.get('picture_enable_federated_avatar', 'false')|lower }}
 
 [attachment]
 PATH = {{ config.get('attachment_path', data_dir ~ '/attachments/') }}

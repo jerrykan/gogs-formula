@@ -73,6 +73,8 @@ gogs:
     
     # disable the use of gravatar for user profile pictures
     picture_disable_gravatar: 'false'
+    # enable the use of libravatar
+    picture_enable_federated_avatar: 'true'
 
     # 'console', 'file', 'conn', 'smtp', or 'database' (default: file)
     #   also see 'logs_dir'
