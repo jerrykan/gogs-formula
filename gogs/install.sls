@@ -20,8 +20,10 @@ gogs-binary-package:
 {%- if salt['grains.get']('saltversioninfo') < [2014, 7, 1] %}
     # leading space and trailing dash are required for salt <2014.7.1
     - tar_options: ' --strip-components=1 -'
-{%- else %}
+{%- elif salt['grains.get']('saltversioninfo') < [2016, 11, 0] %}
     - tar_options: '--strip-components=1'
+{%- else %}
+    - options: '--strip-components=1'
 {%- endif %}
     - require:
       - file: gogs-binary-dir
