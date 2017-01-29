@@ -15,5 +15,7 @@ gogs_conf_file:
     - template: jinja
     - require:
       - file: gogs-conf-dir
+    - require_in:
+      - service: gogs-service
     - watch_in:
       - module: gogs-restart
