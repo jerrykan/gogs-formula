@@ -1,7 +1,7 @@
 {%- from "gogs/map.jinja" import gogs with context -%}
 
 include:
-  - gogs
+  - gogs.install
 
 gogs-conf-dir:
   file.directory:
