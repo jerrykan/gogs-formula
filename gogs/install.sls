@@ -24,6 +24,7 @@ gogs-binary-package:
     - tar_options: '--strip-components=1'
 {%- else %}
     - options: '--strip-components=1'
+    - enforce_toplevel: False
 {%- endif %}
     - require:
       - file: gogs-binary-dir
