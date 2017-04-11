@@ -66,6 +66,17 @@ gogs:
     service_enable_notify_mail: 'false'
     #  enable captcha validation for registration
     service_enable_captcha: 'false'
+
+    # enable to mailer (default: False)
+    mailer_enabled: True
+    # the SMTP mail server to use (default: 'localhost:25')
+    mailer_host: mail.example.com:25
+    # the from address (default: '"Gogs" <(gogs user)@(host fqdn)>')
+    mailer_from: '"Gogs" <noreply@mail.example.com>'
+    # SMTP username
+    mailer_user: smtpuser
+    # SMTP password
+    mailer_passwd: smtppassword
     
     # 'memory', 'file', or 'redis' (default: file)
     #   also see 'data_sessions_dir'

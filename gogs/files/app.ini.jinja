@@ -62,8 +62,16 @@ ENABLE_NOTIFY_MAIL = {{ config.get('service_enable_notify_mail', 'false')|lower 
 ENABLE_CAPTCHA = {{ config.get('service_enable_captcha', 'false')|lower }}
 
 [mailer]
-{#- TODO: correctly manage mailer config and document in pillar.example #}
-ENABLED = {{ config.get('mailer_enabled', 'false')|lower }}
+{%- set mailer_enabled = config.get('mailer_enabled', False) %}
+{%- if mailer_enabled %}
+ENABLED = true
+HOST = {{ config.get('mailer_host', 'localhost:25') }}
+FROM = {{ config.get('mailer_from', '"Gogs" <{0}@{1}>'.format(gogs.user, salt['grains.get']('fqdn'))) }}
+USER = {{ config.get('mailer_user', '') }}
+PASSWD = {{ config.get('mailer_passwd', '') }}
+{%- else %}
+ENABLED = false
+{%- endif %}
 
 [session]
 PROVIDER = {{ config.get('session_provider', 'file') }}
